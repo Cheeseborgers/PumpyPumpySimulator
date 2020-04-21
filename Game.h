@@ -19,19 +19,47 @@
 //      along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "Game.h"
+#ifndef PUMPYPUMPYSIMULATOR_GAME_H
+#define PUMPYPUMPYSIMULATOR_GAME_H
 
-int main() {
 
-    // Game object
-    Game game;
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/Audio.hpp>
 
-    // Game loop
-    while (game.running()) {
-        game.update();
-        game.render();
-    }
+#include <iostream>
+#include <ctime>
+#include <memory>
 
-    // End Game
-    return 0;
-}
+class Game {
+
+private:
+    // Variables
+    sf::VideoMode videoMode;
+    std::unique_ptr<sf::RenderWindow> window;
+    sf::Event sfmlEvent{};
+    bool endGame{};
+
+    // Private Methods
+    void initVariables();
+
+    void initWindow();
+
+public:
+    // Constructor
+    Game();
+
+    // Methods
+    [[nodiscard]] bool running() const;
+
+    void pollEvents();
+
+    void update();
+
+    void render();
+
+};
+
+
+#endif //PUMPYPUMPYSIMULATOR_GAME_H
