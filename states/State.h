@@ -1,6 +1,6 @@
 //
-//      Created by Goodecheeseburgers on 21/04/2020.
-//      PumpyPumpySimulator. A C++ / SFML game.
+//      Created by Goodecheeseburgers on 22/04/2020.
+//      PumpyPumpySimulator. A random C++ / SFML game.
 //      Copyright (C) 2020 - goodecheeseburgers@gmail.com
 //
 //      https://github.com/Cheeseborgers/PumpyPumpySimulator
@@ -19,14 +19,42 @@
 //      along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "Game.h"
+#ifndef PUMPYPUMPYSIMULATOR_STATE_H
+#define PUMPYPUMPYSIMULATOR_STATE_H
 
-int main() {
+#include "IntroState.h"
 
-    Game game;
+class State;
 
-    game.run();
+class StateData
+{
+public:
+    StateData() = default;
 
-    // End Game
-    return 0;
-}
+    //Variables
+    sf::RenderWindow* window{};
+    std::stack<State*>* states{};
+};
+
+class State {
+
+private:
+    // Private Methods
+
+protected:
+    StateData* stateData;
+    std::stack<State*>* states{};
+    sf::RenderWindow* window;
+
+public:
+    // Constructor
+    explicit State(StateData *state_data);
+    virtual ~State();
+
+    // Methods
+    virtual void update() = 0;
+    virtual void render(sf::RenderTarget* target) = 0;
+};
+
+
+#endif //PUMPYPUMPYSIMULATOR_STATE_H

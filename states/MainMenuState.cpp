@@ -1,6 +1,6 @@
 //
-//      Created by Goodecheeseburgers on 21/04/2020.
-//      PumpyPumpySimulator. A C++ / SFML game.
+//      Created by Goodecheeseburgers on 22/04/2020.
+//      PumpyPumpySimulator. A random C++ / SFML game.
 //      Copyright (C) 2020 - goodecheeseburgers@gmail.com
 //
 //      https://github.com/Cheeseborgers/PumpyPumpySimulator
@@ -19,14 +19,11 @@
 //      along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "Game.h"
+#include "MainMenuState.h"
 
-int main() {
-
-    Game game;
-
-    game.run();
-
-    // End Game
-    return 0;
-}
+// Private Methods -----------------------------------------------------------------------------------------------------
+// Constructor ---------------------------------------------------------------------------------------------------------
+mainMenuState::mainMenuState() = default;
+// Accessors -----------------------------------------------------------------------------------------------------------
+// Modifiers -----------------------------------------------------------------------------------------------------------
+// Methods -------------------------------------------------------------------------------------------------------------

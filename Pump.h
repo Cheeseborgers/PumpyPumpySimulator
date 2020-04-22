@@ -1,6 +1,6 @@
 //
-//      Created by Goodecheeseburgers on 21/04/2020.
-//      PumpyPumpySimulator. A C++ / SFML game.
+//      Created by Goodecheeseburgers on 22/04/2020.
+//      PumpyPumpySimulator. A random C++ / SFML game.
 //      Copyright (C) 2020 - goodecheeseburgers@gmail.com
 //
 //      https://github.com/Cheeseborgers/PumpyPumpySimulator
@@ -19,14 +19,41 @@
 //      along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "Game.h"
+#ifndef PUMPYPUMPYSIMULATOR_PUMP_H
+#define PUMPYPUMPYSIMULATOR_PUMP_H
 
-int main() {
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
 
-    Game game;
+#include <iostream>
+#include <memory>
+#include <stack>
 
-    game.run();
+class Pump {
 
-    // End Game
-    return 0;
-}
+private:
+    sf::Sprite sprite;
+    sf::Texture texture;
+
+    // Private Methods
+    void initVariables();
+    void initTextures();
+
+public:
+
+    // Constructor
+    Pump();
+
+    // Accessors
+
+    // Modifiers
+
+    // Methods
+    void update();
+    void render();
+
+};
+
+
+#endif //PUMPYPUMPYSIMULATOR_PUMP_H

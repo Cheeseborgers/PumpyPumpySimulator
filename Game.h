@@ -23,42 +23,57 @@
 #define PUMPYPUMPYSIMULATOR_GAME_H
 
 
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
-
-#include <iostream>
-#include <ctime>
-#include <memory>
+#include "Player.h"
+#include "states/IntroState.h"
 
 class Game {
 
 private:
     // Variables
-    sf::VideoMode videoMode;
     std::unique_ptr<sf::RenderWindow> window;
     sf::Event sfmlEvent{};
+
+    // Game state stuff
+    //TODO fix states and import order
+    std::stack<State*> states;
+    StateData stateData;
+
+    // Player one
+    std::unique_ptr<Player> playerOne;
+    sf::RectangleShape playerOneArea;
+
+    // player two
+    sf::RectangleShape playerTwoArea;
+
+    // Score board GUI
+    sf::RectangleShape scoreBoard;
+
+    // Game logic
     bool endGame{};
 
     // Private Methods
     void initVariables();
-
+    void initPlayers();
+    void initPlayerAreas();
+    void initPlayerGUI();
     void initWindow();
+    void initStateData();
+    void initStates();
 
 public:
     // Constructor
     Game();
+    ~Game();
 
     // Methods
+    void run();
     [[nodiscard]] bool running() const;
 
-    void pollEvents();
-
+    void updatePollEvents();
     void update();
-
+    void renderPlayerAreas(sf::RenderTarget &target);
+    void renderPlayerGUI();
     void render();
-
 };
 
 

@@ -1,9 +1,9 @@
 //
-//      Created by Goodecheeseburgers on 21/04/2020.
-//      PumpyPumpySimulator. A C++ / SFML game.
+//      Created by Goodecheeseburgers on 22/04/2020.
+//      SomeRPG. A C++ console role playing game.
 //      Copyright (C) 2020 - goodecheeseburgers@gmail.com
 //
-//      https://github.com/Cheeseborgers/PumpyPumpySimulator
+//      https://github.com/Cheeseborgers/SomeRPG
 //
 //      This program is free software: you can redistribute it and/or modify
 //      it under the terms of the GNU General Public License as published by
@@ -19,14 +19,35 @@
 //      along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-#include "Game.h"
+#ifndef PUMPYPUMPYSIMULATOR_PLAYER_H
+#define PUMPYPUMPYSIMULATOR_PLAYER_H
 
-int main() {
+#include "Pump.h"
 
-    Game game;
+class Player {
 
-    game.run();
+private:
+    unsigned int points{};
+    std::unique_ptr<Pump> pump;
 
-    // End Game
-    return 0;
-}
+    // Private methods
+    void initPump();
+
+public:
+
+    // Constructor
+    Player();
+
+    // Accessors
+
+    // Modifiers
+
+    // Methods
+    void update();
+    void render();
+
+};
+
+// NS END
+
+#endif //PUMPYPUMPYSIMULATOR_PLAYER_H
