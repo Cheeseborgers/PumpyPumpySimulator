@@ -37,39 +37,17 @@ void Game::initWindow()
 // ---------------------------------------------------------------------------------------------------------------------
 void Game::initVariables()
 {
-    this->endGame = false;
+    this->window = nullptr;
+    this->dt = 0.F;
 }
 // ---------------------------------------------------------------------------------------------------------------------
-void Game::initPlayers()
-{
-    this->playerOne = std::make_unique<Player>();
-}
-//----------------------------------------------------------------------------------------------------------------------
-void Game::initPlayerAreas()
-{
-    // Player one area
-    this->playerOneArea.setSize(sf::Vector2f(this->window->getSize().x / 2, this->window->getSize().y));
-    this->playerOneArea.setFillColor(sf::Color::Red);
-    this->playerOneArea.setOutlineColor(sf::Color::White);
-    this->playerOneArea.setOutlineThickness(1.F);
-    this->playerOneArea.setPosition(0.F, 0.F);
+void Game::initStateData() {
 
-    // Player two area
-    this->playerTwoArea.setSize(sf::Vector2f(this->playerOneArea.getSize().x, this->window->getSize().y));
-    this->playerTwoArea.setFillColor(sf::Color::Green);
-    this->playerTwoArea.setOutlineColor(sf::Color::Black);
-    this->playerTwoArea.setOutlineThickness(1.F);
-    this->playerTwoArea.setPosition(this->playerOneArea.getPosition().x + this->playerOneArea.getSize().x, 0.F);
 }
 // ---------------------------------------------------------------------------------------------------------------------
-void Game::initPlayerGUI()
+void Game::initStates()
 {
-    // Top Score board
-    this->scoreBoard.setSize(sf::Vector2f(700.F, 120.F));
-    this->scoreBoard.setFillColor(sf::Color::Black);
-    this->scoreBoard.setOutlineColor(sf::Color::White);
-    this->scoreBoard.setOutlineThickness(1.F);
-    this->scoreBoard.setPosition(this->window->getSize().x / 2.F - this->scoreBoard.getSize().x / 2, 0.F);
+    this->states.push(new IntroState(this->window, &this->states));
 }
 // Constructor ---------------------------------------------------------------------------------------------------------
 Game::Game()
@@ -77,12 +55,6 @@ Game::Game()
     this->initVariables();
 
     this->initWindow();
-
-    this->initPlayers();
-
-    this->initPlayerAreas();
-
-    this->initPlayerGUI();
 
     // State Stuff (intro state)
     this->initStateData();
@@ -102,7 +74,7 @@ void Game::run()
 {
     while (this->window->isOpen())
     {
-        this->updatePollEvents();
+        this->updateDt();
 
         this->update();
 
@@ -115,41 +87,54 @@ bool Game::running() const
     return this->window->isOpen();
 }
 // ---------------------------------------------------------------------------------------------------------------------
-void Game::updatePollEvents()
+void Game::updateDt()
 {
-    sf::Event e{};
+    /* @return void
+     * Updates the dt variable with the time it takes
+     * to update and render one frame*/
 
-    while (this->window->pollEvent(e))
+    this->dt = this->dtClock.restart().asSeconds();
+}
+// ---------------------------------------------------------------------------------------------------------------------
+void Game::updateEvents()
+{
+    sf::Event ev{};
+
+    while (this->window->pollEvent(ev))
     {
-        // Close game events ==================================================================
-        if (e.Event::type == sf::Event::Closed)
+        if (ev.type == sf::Event::Closed)
         {
             this->window->close();
         }
 
-        if (e.Event::KeyPressed && e.Event::key.code == sf::Keyboard::Escape)
+        if (ev.Event::KeyPressed && ev.Event::key.code == sf::Keyboard::Escape)
         {
             this->window->close();
         }
-        // =====================================================================================
     }
 }
 // ---------------------------------------------------------------------------------------------------------------------
 void Game::update()
 {
-    this->playerOne->update();
-}
-// ---------------------------------------------------------------------------------------------------------------------
-void Game::renderPlayerAreas(sf::RenderTarget &target)
-{
-    target.draw(this->playerOneArea);
+    this->updateEvents();
 
-    target.draw(this->playerTwoArea);
-}
-// ---------------------------------------------------------------------------------------------------------------------
-void Game::renderPlayerGUI()
-{
-    this->window->draw(this->scoreBoard);
+    // update the current state
+    if (!this->states.empty())
+    {
+        this->states.top()->update(this->dt);
+
+        if (this->states.top()->getQuit())
+        {
+            this->states.top()->endState();
+            delete this->states.top();
+            this->states.pop();
+        }
+    }
+    // Game end
+    else {
+        endGame();
+        this->window->close();
+    }
 }
 //----------------------------------------------------------------------------------------------------------------------
 void Game::render()
@@ -157,22 +142,15 @@ void Game::render()
     // Render Stuff
     this->window->clear(); // Clear default black
 
-    this->renderPlayerAreas(*this->window); // Render Player areas
-
-    this->renderPlayerGUI(); // Render scoreboard
+    this->states.top()->render(*this->window);
 
     this->window->display(); // Display frame in window
 }
-
-void Game::initStateData() {
-
-}
-
-void Game::initStates()
+// ---------------------------------------------------------------------------------------------------------------------
+void Game::endGame()
 {
-    this->states.push(new IntroState(&this->stateData));
+    std::cout << "Game ended!\n";
 }
-
 // ---------------------------------------------------------------------------------------------------------------------
 
 

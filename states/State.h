@@ -22,7 +22,13 @@
 #ifndef PUMPYPUMPYSIMULATOR_STATE_H
 #define PUMPYPUMPYSIMULATOR_STATE_H
 
-#include "IntroState.h"
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
+
+#include <iostream>
+#include <memory>
+#include <stack>
 
 class State;
 
@@ -42,18 +48,31 @@ private:
     // Private Methods
 
 protected:
-    StateData* stateData;
     std::stack<State*>* states{};
-    sf::RenderWindow* window;
+    std::shared_ptr<sf::RenderWindow> window;
+
+    // Core
+    bool quit{};
+
+    sf::Vector2i mousePosScreen;
+    sf::Vector2i mousePosWindow;
+    sf::Vector2f mousePosView;
 
 public:
     // Constructor
-    explicit State(StateData *state_data);
+    explicit State(std::shared_ptr<sf::RenderWindow> window, std::stack<State *> *states);
     virtual ~State();
 
+    // Accessors
+    [[nodiscard]] const bool &getQuit() const;
+
+    // Modifiers
+    inline void endState() { this->quit = true; };
+
     // Methods
-    virtual void update() = 0;
-    virtual void render(sf::RenderTarget* target) = 0;
+    virtual void updateMousePositions();
+    virtual void update(const float &dt) = 0;
+    virtual void render(sf::RenderTarget& target) = 0;
 };
 
 

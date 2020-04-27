@@ -13,7 +13,8 @@ add_executable(PumpyPumpySimulator
         Pump.cpp Pump.h
         states/State.cpp states/State.h
         states/MainMenuState.cpp states/MainMenuState.h
-        states/IntroState.cpp states/IntroState.h)
+        states/IntroState.cpp states/IntroState.h
+        GUI/Button.cpp GUI/Button.h states/GameState.cpp states/GameState.h)
 
 add_subdirectory(include/SFML)
 

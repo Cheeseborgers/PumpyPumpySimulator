@@ -30,31 +30,22 @@ class Game {
 
 private:
     // Variables
-    std::unique_ptr<sf::RenderWindow> window;
-    sf::Event sfmlEvent{};
+    std::shared_ptr<sf::RenderWindow> window;
+
+    // Clock
+    sf::Clock dtClock;
+    float dt{};
 
     // Game state stuff
     //TODO fix states and import order
     std::stack<State*> states;
-    StateData stateData;
 
-    // Player one
-    std::unique_ptr<Player> playerOne;
-    sf::RectangleShape playerOneArea;
 
-    // player two
-    sf::RectangleShape playerTwoArea;
-
-    // Score board GUI
-    sf::RectangleShape scoreBoard;
-
-    // Game logic
-    bool endGame{};
 
     // Private Methods
     void initVariables();
     void initPlayers();
-    void initPlayerAreas();
+
     void initPlayerGUI();
     void initWindow();
     void initStateData();
@@ -67,9 +58,11 @@ public:
 
     // Methods
     void run();
+    static void endGame();
     [[nodiscard]] bool running() const;
 
-    void updatePollEvents();
+    void updateDt();
+    void updateEvents();
     void update();
     void renderPlayerAreas(sf::RenderTarget &target);
     void renderPlayerGUI();

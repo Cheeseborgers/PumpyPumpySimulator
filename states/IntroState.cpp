@@ -21,21 +21,48 @@
 
 #include "IntroState.h"
 
+#include <utility>
+
 // Private Methods -----------------------------------------------------------------------------------------------------
-// Constructor ---------------------------------------------------------------------------------------------------------
-IntroState::IntroState(StateData* state_data)
-        : State(state_data)
+void IntroState::initBackground()
 {
 
+    this->background.setSize(sf::Vector2f(
+            static_cast<float>(this->window->getSize().x),
+            static_cast<float >(this->window->getSize().y))
+    );
+
+    if (!this->bgTexture.loadFromFile("assets/images/intro.png"))
+    {
+        throw std::runtime_error ("ERROR::MAINMENUSTATE::INITBACKGROUND: Could not load assets/images/intro.png");
+    }
+
+    this->background.setTexture(&this->bgTexture);
+}
+// Constructor ---------------------------------------------------------------------------------------------------------
+IntroState::IntroState(std::shared_ptr<sf::RenderWindow> window,
+                       std::stack<State *> *states)
+    : State(std::move(window), states) {
+
+  this->introTimerMax = 2.5F;
+  this->initBackground();
 }
 // Methods -------------------------------------------------------------------------------------------------------------
-void IntroState::update()
+void IntroState::update(const float &dt)
 {
-    std::cout << "INTRO STATE: RENDER\n";
+    this->updateMousePositions();
+
+    if (this->clock.getElapsedTime().asSeconds() < this->introTimerMax)
+    {
+
+    } else {
+        this->states->push(new MainMenuState(this->window, this->states));
+    }
 }
 // ---------------------------------------------------------------------------------------------------------------------
-void IntroState::render(sf::RenderTarget *target)
+void IntroState::render(sf::RenderTarget& target)
 {
-    std::cout << "INTRO STATE: RENDER\n";
+    // Render Background
+    target.draw(this->background);
 }
 // ---------------------------------------------------------------------------------------------------------------------

@@ -23,20 +23,28 @@
 #define PUMPYPUMPYSIMULATOR_INTROSTATE_H
 
 #include "MainMenuState.h"
+#include "GameState.h"
 
 
-class IntroState :
-        public State
+class IntroState : public State
 {
 private:
+    sf::RectangleShape background;
+    sf::Texture bgTexture;
+
+    sf::Clock clock;
+    float introTimerMax{};
+
     // Private Methods
+    void initBackground();
+
 public:
     // Constructor
-    explicit IntroState(StateData* state_data);
+    IntroState(std::shared_ptr<sf::RenderWindow> window, std::stack<State *> *states);
 
     // Methods
-    void update() override;
-    void render(sf::RenderTarget* target) override;
+    void update(const float &dt) override;
+    void render(sf::RenderTarget& target) override;
 
 };
 

@@ -21,20 +21,33 @@
 
 #include "State.h"
 
+#include <utility>
+
 
 // ---------------------------------------------------------------------------------------------------------------------
 
 // Private Methods -----------------------------------------------------------------------------------------------------
 // Constructor ---------------------------------------------------------------------------------------------------------
-State::State(StateData* state_data)
+State::State(std::shared_ptr<sf::RenderWindow> window, std::stack<State *> *states)
 {
-    this->stateData = state_data;
-    this->window = state_data->window;
-    this->states = state_data->states;
-
+    this->window = std::move(window);
+    this->states = states;
+    this->quit = false;
 }
-
+// ---------------------------------------------------------------------------------------------------------------------
 State::~State() = default;
 // Accessors -----------------------------------------------------------------------------------------------------------
+const bool &State::getQuit() const
+{
+    return this->quit;
+}
 // Modifiers -----------------------------------------------------------------------------------------------------------
 // Methods -------------------------------------------------------------------------------------------------------------
+void State::updateMousePositions()
+{
+    this->mousePosScreen = sf::Mouse::getPosition();
+    this->mousePosWindow = sf::Mouse::getPosition(*this->window);
+    this->mousePosView = this->window->mapPixelToCoords(sf::Mouse::getPosition(*this->window));
+}
+// ---------------------------------------------------------------------------------------------------------------------
+

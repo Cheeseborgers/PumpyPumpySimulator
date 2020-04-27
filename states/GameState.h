@@ -1,5 +1,5 @@
 //
-//      Created by Goodecheeseburgers on 22/04/2020.
+//      Created by Goodecheeseburgers on 27/04/2020.
 //      PumpyPumpySimulator. A random C++ / SFML game.
 //      Copyright (C) 2020 - goodecheeseburgers@gmail.com
 //
@@ -19,44 +19,47 @@
 //      along with this program.  If not, see <https://www.gnu.org/licenses/>.
 //
 
-#ifndef PUMPYPUMPYSIMULATOR_MAINMENUSTATE_H
-#define PUMPYPUMPYSIMULATOR_MAINMENUSTATE_H
+#ifndef PUMPYPUMPYSIMULATOR_GAMESTATE_H
+#define PUMPYPUMPYSIMULATOR_GAMESTATE_H
 
-#include "GameState.h"
-#include "../GUI/Button.h"
+#include "State.h"
+#include "../Player.h"
 
-
-class MainMenuState  : public State{
+class GameState  : public State{
 
 private:
-    sf::Font font;
-    sf::RectangleShape background;
-    sf::Texture bgTexture;
+    // Player one
+    std::unique_ptr<Player> playerOne;
+    sf::RectangleShape playerOneArea;
 
-    std::map<std::string, std::unique_ptr<Button>> buttons;
+    // player two
+    sf::RectangleShape playerTwoArea;
+
+    // Score board GUI
+    sf::RectangleShape scoreBoard;
 
     // Private Methods
-    void initBackground();
-    void initFonts();
-    void initButtons();
+    void initPlayerAreas();
+    void initPlayers();
+    void initPlayerGUI();
 
 public:
 
     // Constructor
-    MainMenuState(std::shared_ptr<sf::RenderWindow> window, std::stack<State *> *states);
+    GameState(std::shared_ptr<sf::RenderWindow> window, std::stack<State *> *states);
 
     // Accessors
 
     // Modifiers
 
     // Methods
-    void updateButtons();
     void update(const float &dt) override;
 
-    void renderButtons(sf::RenderTarget& target);
+    void renderPlayerAreas(sf::RenderTarget& target);
+    void renderPlayerGUI(sf::RenderTarget& target);
     void render(sf::RenderTarget& target) override;
 
 };
 
 
-#endif //PUMPYPUMPYSIMULATOR_MAINMENUSTATE_H
+#endif //PUMPYPUMPYSIMULATOR_GAMESTATE_H
